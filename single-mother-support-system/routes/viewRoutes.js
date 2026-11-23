@@ -19,4 +19,10 @@ router.get('/dashboard', (req, res) => {
     });
 });
 
+router.get('/admin', (req, res) => {
+    res.render('admin', {
+        title: 'Admin Panel - Support & Legal Assistance System'
+    });
+});
+
 module.exports = router;

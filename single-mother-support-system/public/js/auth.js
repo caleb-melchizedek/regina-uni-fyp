@@ -1,4 +1,5 @@
 const TOKEN_KEY = 'sms_jwt_token';
+const USER_KEY = 'sms_user';
 
 function getToken() {
     return localStorage.getItem(TOKEN_KEY);
@@ -8,8 +9,30 @@ function setToken(token) {
     localStorage.setItem(TOKEN_KEY, token);
 }
 
-function clearToken() {
+function getUser() {
+    const raw = localStorage.getItem(USER_KEY);
+    if (!raw) return null;
+    try {
+        return JSON.parse(raw);
+    } catch {
+        return null;
+    }
+}
+
+function setUser(user) {
+    if (user) {
+        localStorage.setItem(USER_KEY, JSON.stringify(user));
+    }
+}
+
+function clearAuth() {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+}
+
+// Keep clearToken() alias if anything else calls it
+function clearToken() {
+    clearAuth();
 }
 
 // Quick-Exit safety redirect
@@ -20,19 +43,26 @@ if (quickExitBtn) {
     });
 }
 
-// Update navbar based on login state
+// Update navbar based on login state & role
 const authNavLink = document.getElementById('authNavLink');
+const adminNavLink = document.getElementById('adminNavLink');
 const logoutBtn = document.getElementById('logoutBtn');
 
+const currentUser = getUser();
 if (getToken()) {
     if (authNavLink) authNavLink.style.display = 'none';
+    if (adminNavLink && currentUser && currentUser.role === 'admin') {
+        adminNavLink.style.display = 'inline-block';
+    }
     if (logoutBtn) {
         logoutBtn.style.display = 'inline-block';
         logoutBtn.addEventListener('click', () => {
-            clearToken();
+            clearAuth();
             window.location.href = '/auth';
         });
     }
+} else if (adminNavLink) {
+    adminNavLink.style.display = 'none';
 }
 
 // Login handler
@@ -57,32 +87,8 @@ if (loginForm) {
         }
 
         setToken(data.token);
-        window.location.href = '/dashboard';
-    });
-}
+        if (data.user) setUser(data.user);
 
-// Registration handler
-const registerForm = document.getElementById('registerForm');
-if (registerForm) {
-    registerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const payload = {
-            full_name: document.getElementById('regName').value.trim(),
-            email: document.getElementById('regEmail').value.trim(),
-            phone: document.getElementById('regPhone').value.trim(),
-            location: document.getElementById('regLocation').value.trim(),
-            password: document.getElementById('regPassword').value
-        };
-        const msgEl = document.getElementById('authMessage');
-
-        const res = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-
-        msgEl.textContent = data.message || 'Registration completed.';
-        if (res.ok) registerForm.reset();
+        window.location.href = data.user && data.user.role === 'admin' ? '/admin' : '/dashboard';
     });
 }
