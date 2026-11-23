@@ -1,0 +1,63 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="container">
+  <section class="card">
+    <h1>Find a Support or Legal Institution</h1>
+    <div class="filters">
+      <select id="categoryFilter">
+        <option value="All">All Categories</option>
+        <option value="Child Maintenance">Child Maintenance</option>
+        <option value="Child Custody">Child Custody</option>
+        <option value="Domestic Violence">Domestic Violence</option>
+        <option value="Financial & Social Aid">Financial & Social Aid</option>
+        <option value="General Legal Aid">General Legal Aid</option>
+      </select>
+
+      <input type="text" id="cityFilter" placeholder="Filter by city (e.g., Accra)" />
+      <button type="button" id="filterBtn" class="btn-primary">Search</button>
+    </div>
+
+    <div id="providersList" class="providers-grid"></div>
+  </section>
+
+  <section class="card" id="requestSection" style="display: none;">
+    <h2>Submit Assistance Request</h2>
+    <p id="selectedProviderLabel"></p>
+    <form id="requestForm">
+      <input type="hidden" id="selectedProviderId" />
+
+      <label for="issueCategory">Issue Category</label>
+      <select id="issueCategory" required>
+        <option value="Child Maintenance">Child Maintenance</option>
+        <option value="Child Custody">Child Custody</option>
+        <option value="Domestic Violence">Domestic Violence</option>
+        <option value="Financial & Social Aid">Financial & Social Aid</option>
+        <option value="General Legal Aid">General Legal Aid</option>
+      </select>
+
+      <label for="urgencyLevel">Urgency</label>
+      <select id="urgencyLevel">
+        <option value="Low">Low</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="High/Emergency">High/Emergency</option>
+      </select>
+
+      <label for="requestDescription">Brief Summary of Your Situation</label>
+      <textarea id="requestDescription" rows="4" required></textarea>
+
+      <button type="submit" class="btn-primary">Submit Request</button>
+    </form>
+    <p id="requestStatusMsg" class="message"></p>
+  </section>
+
+  <section class="card">
+    <h2>My Submitted Requests</h2>
+    <div id="myRequestsList"></div>
+  </section>
+</main>
+
+<script src="/js/auth.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="container auth-container">
+  <div class="card">
+    <h1>Account Access</h1>
+    <p id="authMessage" class="message"></p>
+
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" required />
+
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" required />
+
+      <button type="submit" class="btn-primary">Login</button>
+    </form>
+
+    <hr />
+
+    <h2>Create an Account</h2>
+    <form id="registerForm">
+      <label for="regName">Full Name</label>
+      <input type="text" id="regName" required />
+
+      <label for="regEmail">Email</label>
+      <input type="email" id="regEmail" required />
+
+      <label for="regPhone">Phone Number</label>
+      <input type="text" id="regPhone" required />
+
+      <label for="regLocation">City / Area</label>
+      <input type="text" id="regLocation" placeholder="e.g., Accra" />
+
+      <label for="regPassword">Password</label>
+      <input type="password" id="regPassword" minlength="6" required />
+
+      <button type="submit" class="btn-secondary">Sign Up</button>
+    </form>
+  </div>
+</main>
+
+<script src="/js/auth.js"></script>
+</body>
+</html>
